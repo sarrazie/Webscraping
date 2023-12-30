@@ -41,7 +41,7 @@ def Current_Games():
     print(urls)
     i=0
     df= pd.DataFrame()
-    ids = pd.Series(['Table Number', 'Move', 'Clues', 'Mystery Word', 'Guess'], name = 'ids')
+    ids = pd.Series(['Table Number', 'Move', 'Mode', 'Speed', 'Language', 'End', 'Clues', 'Mystery Word', 'Guess'], name = 'ids')
     for url in urls:
         try:
             with urllib.request.urlopen(url) as response:
@@ -71,6 +71,26 @@ def Current_Games():
             for move in moves:
                 print(move)
 
+            pattern_mode = r'"menu_option_value_201">(.*?)<'
+            modes = re.findall(pattern_mode, data)
+            for mode in modes:
+                print(mode)
+
+            pattern_speed = r'"menu_option_value_200">(.*?)<'
+            speeds = re.findall(pattern_speed, data)
+            for speed in speeds:
+                print(speed)
+            
+            pattern_language = r'"menu_option_value_207">(.*?)<'
+            languages = re.findall(pattern_language, data)
+            for language in languages:
+                print(language)
+
+            pattern_end = r'"menu_option_value_100">(.*?)<'
+            ends = re.findall(pattern_end, data)
+            for end in ends:
+                print(end)
+
             pattern_clues = r'"clueText":"(.*?)"'
             clue_texts = re.findall(pattern_clues, data)
 
@@ -87,7 +107,7 @@ def Current_Games():
             for guess in guesses:
                 print(guess)
             i= i+1
-            rounds= pd.Series([table_nbr, moves[0], clue_texts, mystery_words[0], guesses[0]], name= 'Scrapnumber' + str(i))
+            rounds= pd.Series([table_nbr, moves, mode, speed, language, end, clue_texts, mystery_words[0], guesses[0]], name= 'Scrapnumber' + str(i))
             df = pd.concat([df, rounds], axis=1)
         else: 
             pass
@@ -96,7 +116,7 @@ def Current_Games():
     filename = ('Game_data_' + datetime.now().strftime("%Y-%m-%d-%H-%M") + '.csv')
     df.to_csv(filename, index=False)
 
-schedule.every(2).hours.do(Current_Games)
+schedule.every(1).minutes.do(Current_Games)
 
 while 1:
     schedule.run_pending()
