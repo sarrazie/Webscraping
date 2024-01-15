@@ -74,7 +74,7 @@ def Current_Games():
             pattern_mode = r'"menu_option_value_201">(.*?)<'
             modes = re.findall(pattern_mode, data)
             for mode in modes:
-                print(mode)
+                 print(mode)
 
             pattern_speed = r'"menu_option_value_200">(.*?)<'
             speeds = re.findall(pattern_speed, data)
