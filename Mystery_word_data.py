@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
+#%%
 import pandas as pd
 import numpy as np
 import os
@@ -16,10 +11,6 @@ from io import StringIO
 from lingua import LanguageDetectorBuilder, Language, IsoCode639_1, IsoCode639_3
 import re
 import codecs
-
-
-# In[ ]:
-
 
 ### Pull and download all csv data sets from the Git repository
 
@@ -50,10 +41,6 @@ def load_data_from_github(repo_url, directory_name):
     
     return data_frames
 
-
-# In[ ]:
-
-
 ### GitHub repository URL and directory name
 github_repo_url = 'sarrazie/Webscraping'
 directory_name = 'WebScrapingWorkshop-main'
@@ -63,10 +50,6 @@ dfs = load_data_from_github(github_repo_url, directory_name)
 
 ### Print the resulting dictionary and any debugging statements
 print(dfs)
-
-
-# In[ ]:
-
 
 ### Transpose all data frames inside the dictionary
 transposed_data_frames = {key: df.transpose() for key, df in dfs.items()}
@@ -79,28 +62,13 @@ for key, df in transposed_data_frames.items():
     # Update the dictionary with the modified DataFrame
     transposed_data_frames[key] = df
 
-
-
-# In[ ]:
-
-
 ### Drop rows where a guess is missing
 for key, df in transposed_data_frames.items():
     df = df.dropna(subset = ['Guess'])
     transposed_data_frames[key] = df
     
-
-
-# In[ ]:
-
-
 ### Define data frame columns in a list for the subsequent loops
-df_columns = ['Table Number', 'Guess', 'Mystery Word', 'Move', 'Clues']
-
-
-# In[ ]:
-
-
+df_columns = ['Table Number', 'Guess', 'Mystery Word', 'Move', 'Clues']   #'Mode', 'Speed', 'Language', 'End'
 #### Transform unicode into char
 def decode_unicode(text):
     return bytes(text, 'utf-8').decode('unicode-escape')
@@ -118,16 +86,8 @@ for key, df in transposed_data_frames.items():
             
     transposed_data_frames[key] = df
 
-
-# In[ ]:
-
-
 #### Concatenate all data sets 
 big_df = pd.concat(transposed_data_frames.values(), ignore_index=True)
-
-
-# In[ ]:
-
 
 ## Create a data frame containing duplicates 
 dup = big_df[big_df.duplicated(subset=['Move', 'Table Number'], keep=False)].sort_values(by=['Table Number', 'Move'])
@@ -135,34 +95,16 @@ dup = big_df[big_df.duplicated(subset=['Move', 'Table Number'], keep=False)].sor
 ## Drop duplicates
 big_df = big_df.drop_duplicates(subset=['Table Number', 'Move'])
 
-
-# In[ ]:
-
-
 ### Detect languages and specify the languages to be either english, german or french (slightly increases accuracy)
 languages = [Language.ENGLISH, Language.FRENCH, Language.GERMAN]
 detector = LanguageDetectorBuilder.from_languages(*languages).build()
 
-
-# In[ ]:
-
-
 ### Apply detect function to the Mystery Word column
 big_df['Language'] = big_df['Mystery Word'].apply(detector.detect_language_of)
-
-
-# In[ ]:
-
 
 ### Sort data set by Table Number to check whether the detection function worked
 big_df = big_df.sort_values(by=['Table Number'])
 
-
-# In[ ]:
-
-
-### Filter data set by language
-english_df = big_df.loc[big_df['Language'] == Language.ENGLISH] 
-french_df = big_df.loc[big_df['Language'] == Language.FRENCH] 
-german_df = big_df.loc[big_df['Language'] == Language.GERMAN] 
+filename = ('Game_data.csv')
+big_df.to_csv(filename, index=False)
 
