@@ -8,7 +8,7 @@ from io import StringIO
 
 ### Install lingua-language-detector
 #!pip install lingua-language-detector
-from lingua import LanguageDetectorBuilder, Language, IsoCode639_1, IsoCode639_3
+#from lingua import LanguageDetectorBuilder, Language, IsoCode639_1, IsoCode639_3
 import re
 import codecs
 
@@ -96,15 +96,15 @@ dup = big_df[big_df.duplicated(subset=['Move', 'Table Number'], keep=False)].sor
 big_df = big_df.drop_duplicates(subset=['Table Number', 'Move'])
 
 ### Detect languages and specify the languages to be either english, german or french (slightly increases accuracy)
-languages = [Language.ENGLISH, Language.FRENCH, Language.GERMAN]
-detector = LanguageDetectorBuilder.from_languages(*languages).build()
+#languages = [Language.ENGLISH, Language.FRENCH, Language.GERMAN]
+#detector = LanguageDetectorBuilder.from_languages(*languages).build()
 
 ### Apply detect function to the Mystery Word column
-big_df['Language'] = big_df['Mystery Word'].apply(detector.detect_language_of)
+#big_df['Language'] = big_df['Mystery Word'].apply(detector.detect_language_of)
 
 ### Sort data set by Table Number to check whether the detection function worked
-big_df = big_df.sort_values(by=['Table Number'])
+big_df = big_df.sort_values(by=['Table Number', 'Move'])
 
 filename = ('Game_data.csv')
 big_df.to_csv(filename, index=False)
-
+#%%
