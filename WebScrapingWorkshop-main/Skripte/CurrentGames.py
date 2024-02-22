@@ -126,7 +126,7 @@ def Current_Games():
             filename = ('Game_data_' + datetime.now().strftime("%Y-%m-%d-%H-%M") + '.csv')
             df.to_csv(filename, index=False)
 
-schedule.every(30).seconds.do(Current_Games)
+schedule.every(5).minutes.do(Current_Games)
 
 while 1:
     schedule.run_pending()
