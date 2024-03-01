@@ -121,12 +121,12 @@ def Current_Games():
                     df = pd.concat([df, rounds], axis=1)
                 else: 
                     pass
-                sleep(5)
+                sleep(3)
             df = pd.concat([ids, df], axis=1)
             filename = ('Game_data_' + datetime.now().strftime("%Y-%m-%d-%H-%M") + '.csv')
             df.to_csv(filename, index=False)
 
-schedule.every(5).minutes.do(Current_Games)
+schedule.every(2).hours.do(Current_Games)
 
 while 1:
     schedule.run_pending()
