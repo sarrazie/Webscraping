@@ -137,7 +137,7 @@ def Current_Games():
         print("An unexpected error occurred:", e)
 
 
-schedule.every(3).hours.do(Current_Games)
+schedule.every(4).hours.do(Current_Games)
 
 while 1:
     schedule.run_pending()
