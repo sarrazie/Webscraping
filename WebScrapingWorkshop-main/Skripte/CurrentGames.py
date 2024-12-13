@@ -24,13 +24,19 @@ def Current_Games():
         username = 'erik.sarrazin@t-online.de'
         password = 'Borussia1900'
         driver.get('https://de.boardgamearena.com/account?redirect=account?redirect=gameinprogress?game=1533&all')
-        driver.find_element("id", "username_input").send_keys(username)
-        driver.find_element("id", "password_input").send_keys(password)
-        driver.find_element("id", "submit_login_button").click()
+        driver.find_element(By.XPATH, "/html/body/div[2]/div[5]/div[1]/div/div/div/div/div[10]/div[3]/div/div[2]/div/div[2]/div[1]/div/div[2]/form/div[2]/div/input").send_keys(username)
+        sleep(2)
+        driver.find_element(By.XPATH, "/html/body/div[2]/div[5]/div[1]/div/div/div/div/div[10]/div[3]/div/div[2]/div/div[2]/div[1]/div/div[2]/form/div[3]/div/a").click()
+        sleep(2)
+        driver.find_element(By.XPATH, "/html/body/div[2]/div[5]/div[1]/div/div/div/div/div[10]/div[3]/div/div[2]/div/div[2]/div[2]/div/form/div[1]/div[2]/div/input").send_keys(password)
+        sleep(2)
+        driver.find_element(By.XPATH, "/html/body/div[2]/div[5]/div[1]/div/div/div/div/div[10]/div[3]/div/div[2]/div/div[2]/div[2]/div/form/div[2]/div/div/a").click()
+        sleep(2)
+        driver.find_element(By.XPATH, "/html/body/div[2]/div[5]/div[1]/div/div/div/div/div[10]/div[3]/div/div[2]/div/div[2]/div[3]/div[2]/div[3]/div[3]/div/div/a").click()
         sleep(5)
         url = "https://boardgamearena.com/gameinprogress?game=1533&all"
         driver.get(url)
-        sleep(3)
+        sleep(2)
         element = WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "#main-content > div > div.flex.items-center.justify-center.gap-2 > div:nth-child(4) > div > div > a")))
         urls = []
